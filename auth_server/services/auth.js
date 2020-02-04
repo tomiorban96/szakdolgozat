@@ -1,24 +1,45 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import User from '../models/User';
 
-export const authenticate = async (email, password) => {
+const saltRounds = 10;
 
-  User.findOne({
-    email: email,
-    password: password
-  })
-  .then( (user) => {
-    return jwt.sign({
-      exp: Math.floor(Date.now() / 1000) + (60 * 60),
-      data: user,
-    }, 'secret');
+export const authenticate = async (email, password) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({
+        email: email
+      })
+      .then((user) => {
+        if (!user) {
+          reject()
+        }
+        bcrypt.compare(password, user.password, (err, match) => {
+          if (err) {
+            reject(err);
+          }
+          if (!match) {
+            reject(err);
+          }
+          resolve(jwt.sign({
+            exp: Math.floor(Date.now() / 1000) + (60 * 60),
+            data: user,
+          }, 'secret'));
+        })
+      });
   })
 };
 
 export const register = async (email, password) => {
-  let user = new User({
-    email: email,
-    password: password
-  });
-  return user.save();
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      if (err) {
+        reject(err);
+      }
+      let user = new User({
+        email: email,
+        password: hash
+      });
+      resolve(user.save());
+    });
+  })
 };

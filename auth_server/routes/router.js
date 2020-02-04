@@ -14,21 +14,21 @@ router.post('/authenticate', async (req, res) => {
   } = req.body;
   authenticate(email, password)
     .then((token) => {
-      if (!!token) {
-        res.cookie('token', token, {
-          expires: new Date(Date.now() + 100),
-          secure: false,
-          httpOnly: true
-        }).status(200).json({
-          status: 200
-        });
-      } else {
-        res.status(400).json({
-          status: 400,
-          message: 'Username or password is incorrect'
-        })
-      }
-    });
+      res.cookie('token', token, {
+        expires: new Date(Date.now() + 100),
+        secure: false,
+        httpOnly: true
+      });
+      res.status(200).json({
+        status: 200
+      });
+    })
+    .catch(() => {
+      res.status(400).json({
+        status: 400,
+        message: 'Username or password is incorrect'
+      });
+    })
 });
 
 router.post('/register', async (req, res) => {
