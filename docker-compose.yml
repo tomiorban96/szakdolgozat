@@ -1,0 +1,12 @@
+version: "3"
+services:
+  auth_server:
+    build: ./auth_server
+    ports:
+    - "3000:3000"
+    depends_on:
+    - mongo_auth
+  mongo_auth:
+    image: mongo
+    ports:
+    - "27022:27017"
