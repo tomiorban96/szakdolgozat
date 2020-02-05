@@ -26,7 +26,7 @@ router.post('/authenticate', async (req, res) => {
     .catch(() => {
       res.status(400).json({
         status: 400,
-        message: 'Username or password is incorrect'
+        message: 'Email or password is incorrect'
       });
     })
 });
