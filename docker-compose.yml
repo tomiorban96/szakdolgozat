@@ -1,12 +1,30 @@
-version: "3"
+version: "3.1"
 services:
   auth_server:
-    build: ./auth_server
+    build: ./backend/auth_server
+    container_name: auth_server
     ports:
-    - "3000:3000"
+      - "3000:3000"
     depends_on:
-    - mongo_auth
+      - mongo_auth
+    environment:
+      - MONGO_HOST=mongo_auth
   mongo_auth:
     image: mongo
+    container_name: mongo_auth
     ports:
-    - "27022:27017"
+      - "27022:27017"
+  product_catalog:
+    build: ./backend/product_catalog
+    container_name: product_catalog
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo_catalog
+    environment:
+      - MONGO_HOST=mongo_catalog
+  mongo_catalog:
+    image: mongo
+    container_name: mongo_catalog
+    ports:
+      - "27023:27017"
