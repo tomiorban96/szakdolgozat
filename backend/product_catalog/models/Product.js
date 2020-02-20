@@ -18,6 +18,10 @@ import {
       type: String,
       required: true
     },
+    stock: {
+      type: Number,
+      required: true
+    },
   });
   
   export default model('Product', ProductSchema);

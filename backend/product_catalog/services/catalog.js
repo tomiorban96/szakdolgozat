@@ -10,4 +10,16 @@ export const listAll = async () => {
         reject(err);
       });
   });
-}
+};
+
+export const addMany = async (products) => {
+  return new Promise((resolve, reject) => {
+    Product.insertMany(products)
+      .then((products) => {
+        resolve(products);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
