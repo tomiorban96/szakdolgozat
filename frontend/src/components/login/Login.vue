@@ -39,7 +39,7 @@
           <v-btn v-if="!registerFormIsOpen" color="primary" :loading="loginLoading" type="submit" :disabled="!formIsValid">
             Login
           </v-btn>
-          <v-btn v-else color="primary" :loading="registerLoading" type="submit" :disabled="!formIsValid">
+          <v-btn v-else @click="register" color="primary" :loading="registerLoading" type="submit" :disabled="!formIsValid">
             Register
           </v-btn>
         </v-card-actions>
@@ -49,7 +49,9 @@
 </template>
 
 <script>
-  //import auth from '../../requests/auth';
+  import {
+    authenticate
+  } from '../../requests/authRequest';
 
   export default {
     props: {
@@ -66,7 +68,7 @@
         v => !!v || 'Password is required'
       ],
       formIsValid: false,
-      showLoginDialog: true,
+      showLoginDialog: false,
       loginLoading: false,
       cardTitle: "Login",
       registerFormIsOpen: false,
@@ -83,13 +85,13 @@
     }),
     methods: {
       loginClicked() {
-        /*auth.authenticate(this.email, this.password)
+        authenticate(this.email, this.password)
         .then((result) => {
           console.log(result);
         })
         .catch((err) => {
           console.log(err);
-        })*/
+        });
         this.loginLoading = !this.loginLoading;
       },
       onRegisterFormOpened() {

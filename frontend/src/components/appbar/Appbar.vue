@@ -5,9 +5,6 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
-            <v-icon>mdi-heart</v-icon>
-        </v-btn>
         <Login />
     </v-app-bar>
 </template>
