@@ -32,7 +32,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn v-if="!registerFormIsOpen" @click="onRegisterFormOpened" color="primary" text>
+          <v-btn v-if="!registerFormIsOpen" :disabled="openRegisterIsDisabled" @click="onRegisterFormOpened" color="primary" text>
             Register
           </v-btn>
           <v-spacer></v-spacer>
@@ -81,10 +81,12 @@
       ],
       passwordVerifyRules: [
         v => !!v || 'Field is required'
-      ]
+      ],
+      openRegisterIsDisabled: false,
     }),
     methods: {
       loginClicked() {
+        this.openRegisterIsDisabled = true;
         authenticate(this.email, this.password)
         .then((result) => {
           console.log(result);
