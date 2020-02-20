@@ -14,7 +14,7 @@ console.log(process.env.MONGO_HOST);
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/', ProductRouter);
+app.use('/api/catalog/', ProductRouter);
 
 const mongoOptions = {
   useNewUrlParser: true,

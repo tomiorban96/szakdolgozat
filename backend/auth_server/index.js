@@ -15,7 +15,7 @@ const mongo_host = process.env.MONGO_HOST || 'localhost'
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use('/', UserRouter);
+app.use('/api/auth/', UserRouter);
 
 const mongoOptions = {
   useNewUrlParser: true,

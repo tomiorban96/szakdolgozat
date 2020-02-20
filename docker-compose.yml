@@ -28,3 +28,25 @@ services:
     container_name: mongo_catalog
     ports:
       - "27023:27017"
+  frontend:
+    environment: 
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      context: ./frontend
+    container_name: webshop_frontend
+    volumes:
+      - ./frontend:/home/frontend
+    ports:
+      - "8080:8080"
+  nginx:
+    build:
+      context: ./nginx
+    container_name: webshop_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./frontend:/home
+    depends_on:
+      - auth_server
+      - product_catalog
