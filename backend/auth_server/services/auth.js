@@ -29,15 +29,18 @@ export const authenticate = async (email, password) => {
   })
 };
 
-export const register = async (email, password) => {
+export const register = async (email, password, firstName, lastName) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) {
+        console.log(err);
         reject(err);
       }
       let user = new User({
         email: email,
-        password: hash
+        password: hash,
+        firstName,
+        lastName
       });
       resolve(user.save());
     });

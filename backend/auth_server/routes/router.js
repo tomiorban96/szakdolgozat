@@ -34,16 +34,19 @@ router.post('/authenticate', async (req, res) => {
 router.post('/register', async (req, res) => {
   const {
     email,
-    password
+    password,
+    firstName,
+    lastName
   } = req.body;
-  register(email, password)
+  register(email, password, firstName, lastName)
     .then((user) => {
       res.status(201).json({
         status: 201,
         data: user
       })
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err);
       res.status(400).json({
         status: 400,
         message: 'User already exists'
