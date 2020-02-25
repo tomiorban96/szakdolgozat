@@ -31,7 +31,7 @@
               View
             </v-btn>
             <v-spacer />
-            <v-btn icon>
+            <v-btn v-if="loggedIn" icon>
               <v-icon>mdi-cart-arrow-down</v-icon>
             </v-btn>
           </v-card-actions>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import {
   listAll
 } from '../../requests/catalogRequest';
@@ -54,6 +55,9 @@ export default {
     products: null,
     cardsLoading: true,
   }),
+  computed: {
+    ...mapState('UserStore', ['loggedIn']),
+  },
   created() {
     this.cardsLoading = true;
     listAll()
