@@ -126,7 +126,7 @@
 
 <script>
   import {
-    authenticate
+    authenticate, getUser
   } from '../../requests/authRequest';
 
   export default {
@@ -165,7 +165,9 @@
         this.openRegisterIsDisabled = true;
         authenticate(this.email, this.password)
         .then((result) => {
+          this.$store.commit('UserStore/setUser', result);
           this.showLoginDialog = false;
+          this.loginLoading = false;
         })
         .catch((err) => {
         });

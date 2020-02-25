@@ -14,13 +14,13 @@ router.post('/authenticate', async (req, res) => {
     password
   } = req.body;
   authenticate(email, password)
-    .then((token) => {
-      res.cookie('token', token, {
+    .then((result) => {
+      res.cookie('token', result.token, {
         secure: false,
         httpOnly: true
       });
       res.status(200).json({
-        status: 200
+        ...result.user
       });
     })
     .catch(() => {
@@ -55,7 +55,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/user', async (req, res) => {
-  console.log(req.cookies);
   if (req.cookies.token) {
     getUserFromToken(req.cookies.token)
       .then(
@@ -67,4 +66,9 @@ router.get('/user', async (req, res) => {
   } else {
     res.status(401).send();
   }
+});
+
+router.post('/logout', async (req, res) => {
+  res.clearCookie('token');
+  res.status(200).send();
 });

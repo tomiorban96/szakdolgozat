@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import md5 from 'md5';
 import User from '../models/User';
 
 const saltRounds = 10;
@@ -18,10 +19,10 @@ export const authenticate = async (email, password) => {
             if (err || !match) {
               reject(err);
             } else {
-              resolve(jwt.sign({
+              resolve({ token: jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (60 * 60),
-                data: user,
-              }, secret));
+                data: mapUser(user),
+              }, secret), user: mapUser(user)});
             }
           })
         }
@@ -58,4 +59,13 @@ export const getUserFromToken = async (token) => {
       reject(err);
     }
   });
+};
+
+const mapUser = (user) => {
+  return {
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    avatarUrl: `https://www.gravatar.com/avatar/${md5(user.email)}`
+  };
 };

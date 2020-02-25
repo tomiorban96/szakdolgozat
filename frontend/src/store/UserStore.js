@@ -4,22 +4,23 @@ export const initialState = {
 };
 
 export default {
+  namespaced: true,
   state: initialState,
   mutations: {
+    setUser(state, payload) {
+      state.user = payload;
+      state.loggedIn = true;
+    },
     clearStore(state) {
       state.user = {};
       state.loggedIn = false;
     },
-    setUser(state, payload) {
-      state.user = payload;
-      state.loggedIn = true;
-    }
   },
   getters: {
     getUser(state) {
       return state.user;
     },
-    getUserLoggedIn(state) {
+    getLoggedIn(state) {
       return state.loggedIn;
     }
   }

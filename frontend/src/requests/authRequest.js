@@ -5,7 +5,7 @@ export const authenticate = async (email, password) => {
   return new Promise((resolve, reject) => {
     axios.post('/api/auth/authenticate', {email, password})
       .then((result) => {
-        resolve(result);
+        resolve(result.data);
       })
       .catch((error) => {
         reject(error);
@@ -17,10 +17,16 @@ export const getUser = async () => {
   return new Promise((resolve, reject) => {
     axios.get('/api/auth/user', {})
       .then((result) => {
-        resolve(result);
+        resolve(result.data);
       })
       .catch((error) => {
         reject(error);
       })
+  });
+};
+
+export const logOut = async () => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/auth/logout', {});
   });
 };

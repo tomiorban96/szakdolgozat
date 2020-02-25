@@ -28,9 +28,9 @@ export default {
   created() {
     getUser()
       .then((result) => {
-        this.$store.commit('setUser', result.data.data);
+        this.$store.commit('UserStore/setUser', result.data);
       })
-      .catch(() => {
+      .catch((error) => {
         this.$store.commit('UserStore/clearStore');
       })
   },
