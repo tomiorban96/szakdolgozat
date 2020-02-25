@@ -9,6 +9,8 @@ services:
       - mongo_auth
     environment:
       - MONGO_HOST=mongo_auth
+    volumes:
+      - ./backend/auth_server:/usr/src/app
   mongo_auth:
     image: mongo
     container_name: mongo_auth
@@ -23,6 +25,8 @@ services:
       - mongo_catalog
     environment:
       - MONGO_HOST=mongo_catalog
+    volumes:
+      - ./backend/product_catalog:/usr/src/app
   mongo_catalog:
     image: mongo
     container_name: mongo_catalog
