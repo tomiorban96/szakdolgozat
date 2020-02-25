@@ -23,3 +23,15 @@ export const addMany = async (products) => {
       });
   });
 };
+
+export const findOne = async (id) => {
+  return new Promise((resolve, reject) => {
+    Product.findById(id)
+      .then((product) => {
+        resolve(product);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

@@ -3,7 +3,8 @@ import {
 } from 'express';
 import {
   authenticate,
-  register
+  register,
+  getUserFromToken
 } from '../services/auth';
 export const router = Router();
 
@@ -15,7 +16,6 @@ router.post('/authenticate', async (req, res) => {
   authenticate(email, password)
     .then((token) => {
       res.cookie('token', token, {
-        expires: new Date(Date.now() + 100),
         secure: false,
         httpOnly: true
       });
@@ -52,4 +52,19 @@ router.post('/register', async (req, res) => {
         message: 'User already exists'
       })
     });
+});
+
+router.get('/user', async (req, res) => {
+  console.log(req.cookies);
+  if (req.cookies.token) {
+    getUserFromToken(req.cookies.token)
+      .then(
+        (user) => res.status(200).json(user)
+      )
+      .catch(
+        () => res.status(401).send()
+      );
+  } else {
+    res.status(401).send();
+  }
 });

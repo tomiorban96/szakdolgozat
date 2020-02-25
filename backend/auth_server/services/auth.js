@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import User from '../models/User';
 
 const saltRounds = 10;
+const secret = 'secret';
 
 export const authenticate = async (email, password) => {
   return new Promise((resolve, reject) => {
@@ -12,19 +13,18 @@ export const authenticate = async (email, password) => {
       .then((user) => {
         if (!user) {
           reject()
+        } else {
+          bcrypt.compare(password, user.password, (err, match) => {
+            if (err || !match) {
+              reject(err);
+            } else {
+              resolve(jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                data: user,
+              }, secret));
+            }
+          })
         }
-        bcrypt.compare(password, user.password, (err, match) => {
-          if (err) {
-            reject(err);
-          }
-          if (!match) {
-            reject(err);
-          }
-          resolve(jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            data: user,
-          }, 'secret'));
-        })
       });
   })
 };
@@ -45,4 +45,17 @@ export const register = async (email, password, firstName, lastName) => {
       resolve(user.save());
     });
   })
+};
+
+export const getUserFromToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    let decoded;
+    try {
+      decoded = jwt.verify(token, secret);
+      console.log(decoded);
+      resolve(decoded);
+    } catch (err) {
+      reject(err);
+    }
+  });
 };

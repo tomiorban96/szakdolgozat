@@ -3,7 +3,8 @@ import {
 } from 'express';
 import {
   listAll,
-  addMany
+  addMany,
+  findOne,
 } from '../services/catalog';
 export const router = Router();
 
@@ -15,6 +16,16 @@ router.get('/products', async (req, res) => {
     .catch(() => {
       res.status(400);
     });
+});
+
+router.get('/products/:id', async (req, res) => {
+  findOne(req.params.id)
+    .then((product) => {
+      res.status(200).json(product);
+    })
+    .catch(() => {
+      res.status(404).send();
+    })
 });
 
 router.post('/products', async (req, res) => {
