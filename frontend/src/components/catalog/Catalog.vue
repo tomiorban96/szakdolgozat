@@ -31,7 +31,10 @@
               View
             </v-btn>
             <v-spacer />
-            <v-btn v-if="loggedIn" icon>
+            <v-btn
+              v-if="loggedIn"
+              icon
+            >
               <v-icon>mdi-cart-arrow-down</v-icon>
             </v-btn>
           </v-card-actions>

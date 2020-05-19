@@ -32,18 +32,21 @@ router.post('/authenticate', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const {
-    email,
-    password,
-    firstName,
-    lastName
-  } = req.body;
-  register(email, password, firstName, lastName)
+  register(req.body)
     .then((user) => {
-      res.status(201).json({
-        status: 201,
-        data: user
-      })
+      authenticate(user.email, req.body.password)
+        .then((result) => {
+          res.cookie('token', result.token, {
+            secure: false,
+            httpOnly: true
+          });
+          res.status(200).json({
+            ...result.user
+          });
+        })
+        .catch((error) => {
+          res.status(500).send();
+        })
     })
     .catch((err) => {
       console.log(err);

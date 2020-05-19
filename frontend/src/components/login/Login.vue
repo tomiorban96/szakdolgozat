@@ -86,6 +86,12 @@
               type="text"
             />
           </div>
+          <p
+            v-if="loginError"
+            class="error-msg"
+          >
+            Username or password is incorrect!
+          </p>
         </v-card-text>
         <v-divider />
         <v-card-actions>
@@ -112,7 +118,6 @@
             v-else
             color="primary"
             :loading="registerLoading"
-            type="submit"
             :disabled="!formIsValid"
             @click="register"
           >
@@ -126,7 +131,7 @@
 
 <script>
   import {
-    authenticate, getUser
+    authenticate, getUser, register
   } from '../../requests/authRequest';
 
   export default {
@@ -134,6 +139,13 @@
       //source: String,
     },
     data: () => ({
+      user: {
+        email: null,
+        password: null,
+        verifyPassword: null,
+        firstName: null,
+        lastName: null
+      },
       email: null,
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -159,27 +171,51 @@
         v => !!v || 'Field is required'
       ],
       openRegisterIsDisabled: false,
+      loginError: false,
     }),
     methods: {
       loginClicked() {
+        this.loginError = false;
         this.openRegisterIsDisabled = true;
         authenticate(this.email, this.password)
         .then((result) => {
           this.$store.commit('UserStore/setUser', result);
           this.showLoginDialog = false;
+        })
+        .catch(() => {
+          this.loginError = true;
+          this.openRegisterIsDisabled = false;
+        })
+        .finally(() => {
           this.loginLoading = false;
         })
-        .catch((err) => {
-        });
-        this.loginLoading = !this.loginLoading;
       },
       onRegisterFormOpened() {
+        this.loginError = false;
         this.registerFormIsOpen = true;
         this.cardTitle = "Register";
       },
       onClose() {
+        this.loginError = false;
         this.showLoginDialog = false;
         this.registerFormIsOpen = false;
+      },
+      register() {
+        this.registerLoading = true;
+        register({
+          email: this.email,
+          password: this.password,
+          firstName: this.firstName,
+          lastName: this.lastName
+        })
+        .then((result) => {
+          this.$store.commit('UserStore/setUser', result);
+          this.registerLoading = false;
+          this.showLoginDialog = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       }
     }
   }
@@ -192,5 +228,9 @@
 
   .close-button {
     color: white !important
+  }
+
+  .error-msg {
+    color: red !important
   }
 </style>

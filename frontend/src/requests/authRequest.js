@@ -13,6 +13,18 @@ export const authenticate = async (email, password) => {
   });
 }
 
+export const register = async (user) => {
+  return new Promise((resolve, reject) => {
+    axios.post('/api/auth/register', { ...user })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const getUser = async () => {
   return new Promise((resolve, reject) => {
     axios.get('/api/auth/user', {})

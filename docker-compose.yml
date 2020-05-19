@@ -48,6 +48,22 @@ services:
     container_name: mongo_cart
     ports:
       - "27024:27017"
+  order_management:
+    build: ./backend/order_management
+    container_name: order_management
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo_orders
+    environment:
+      - MONGO_HOST=mongo_orders
+    volumes:
+      - ./backend/order_management:/usr/src/app
+  mongo_orders:
+    image: mongo
+    container_name: mongo_orders
+    ports:
+      - "27025:27017"
   frontend:
     environment: 
       - CHOKIDAR_USEPOLLING=true
@@ -70,3 +86,5 @@ services:
     depends_on:
       - auth_server
       - product_catalog
+      - shopping_cart
+      - order_management

@@ -30,20 +30,14 @@ export const authenticate = async (email, password) => {
   })
 };
 
-export const register = async (email, password, firstName, lastName) => {
+export const register = async (user) => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, (err, hash) => {
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
       if (err) {
-        console.log(err);
         reject(err);
       }
-      let user = new User({
-        email: email,
-        password: hash,
-        firstName,
-        lastName
-      });
-      resolve(user.save());
+      let userToSave = new User({...user, password: hash});
+      resolve(userToSave.save());
     });
   })
 };
